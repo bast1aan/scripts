@@ -1,2 +1,9 @@
-Put the files in /usr/local/sbin
+Simple automounter consisting of shell scripts, using inotifywait.
 
+
+- Put the files in /usr/local/sbin
+- Set a cron to run /usr/local/sbin/automounter.sh to run every 10 seconds.
+  This will initiate the watchers for the mount directories defined in automount-*.sh
+- For convenience, use a limited tmpfs for /mnt/auto to prevent large stuff written
+  to the root parition if something goes wrong. Add this to /etc/fstab :
+  tmpfs   /mnt/auto    tmpfs   size=5M,noexec,nodev,nosuid,mode=0755  0       0
