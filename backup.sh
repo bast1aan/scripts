@@ -58,6 +58,7 @@ rsync -rlptvx --bwlimit=1000 --delete `echo_exclude_opts $encrypted_encludes` $m
 
 fusermount -u $mountpoint
 
+echo Making hardlink snapshot...
 today=`date +%Y_%m_%d`
 ssh $EXTERNAL_SSH cp -al storage/t450s storage/snapshots/t450s/$today
-
+echo done.
