@@ -7,20 +7,16 @@ tmp
 .cache
 EOF`
 
-echo_pwd() {
-    cat ~/.encfs_pwd
-}
-
 echo_existing_excludes() {
     #find if dirs actually exist
     for i in $EXCLUDES; do
-        if [ -d $i ]; then
+        if [ -d $HOME/$i ]; then
             echo $i
         fi
     done;
 }
 
-echo_existing_excludes | encfsctl encode --extpass=$HOME/bin/echo_encfs_pwd $HOME
+echo_existing_excludes | encfsctl encode --extpass="/bin/cat $HOME/.encfs_pwd" $HOME
 
 echo $existing_excludes
 
