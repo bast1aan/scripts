@@ -16,9 +16,15 @@ echo_existing_excludes() {
     done;
 }
 
-echo_existing_excludes | encfsctl encode --extpass="/bin/cat $HOME/.encfs_pwd" $HOME
+echo_exclude_opts() {
+    for i in $@; do
+        echo -n "--exclude $i "
+    done;
+}
 
-echo $existing_excludes
+encrypted_encludes=`echo_existing_excludes | encfsctl encode --extpass="/bin/cat $HOME/.encfs_pwd" $HOME`
+
+echo_exclude_opts $encrypted_encludes
 
 #rsync -rlptvx --delete --exclude tmp --exclude .cache --exclude build \
 #  --exclude snap --exclude .thunderbird --exclude nobackup \
