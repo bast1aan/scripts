@@ -26,6 +26,12 @@ encrypted_encludes=`echo_existing_excludes | encfsctl encode --extpass="/bin/cat
 
 echo_exclude_opts $encrypted_encludes
 
+mountpoint=/var/tmp/$USER-export
+mkdir $mountpoint
+
+encfs --reverse --extpass="/bin/cat $HOME/.encfs_pwd" $HOME $mountpoint
+
+
 #rsync -rlptvx --delete --exclude tmp --exclude .cache --exclude build \
 #  --exclude snap --exclude .thunderbird --exclude nobackup \
 #  --exclude .WebIde70/system --exclude .crypt-baardmans \
