@@ -60,6 +60,9 @@ rsync -rlptvx --bwlimit=1000 --delete `echo_exclude_opts $encrypted_encludes` $m
 
 fusermount -u $mountpoint
 
+today=`date +%Y_%m_%d`
+ssh $EXTERNAL_SSH cp -al storage/t450s storage/snapshots/t450s/$today
+
 #rsync -rlptvx --delete --exclude tmp --exclude .cache --exclude build \
 #  --exclude snap --exclude .thunderbird --exclude nobackup \
 #  --exclude .WebIde70/system --exclude .crypt-baardmans \
