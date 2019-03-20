@@ -30,6 +30,8 @@ tmp
 .cache
 EOF`
 
+EXTERNAL_SSH=cloudsuite@myexamplebackupserver.net
+
 echo_existing_excludes() {
     #find if dirs actually exist
     for i in $EXCLUDES; do
@@ -54,6 +56,9 @@ mkdir $mountpoint
 
 encfs --reverse --extpass="/bin/cat $HOME/.encfs_pwd" $HOME $mountpoint
 
+rsync -rlptvx --bwlimit=1000 --delete `echo_exclude_opts $encrypted_encludes` $mountpoint/ $EXTERNAL_SSH:storage/t450s/home/$USER
+
+fusermount -u $mountpoint
 
 #rsync -rlptvx --delete --exclude tmp --exclude .cache --exclude build \
 #  --exclude snap --exclude .thunderbird --exclude nobackup \
