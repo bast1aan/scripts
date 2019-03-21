@@ -28,12 +28,11 @@
 # 
 # Done!
 
-EXCLUDES=`cat <<EOF
-snap
+EXCLUDES="snap
 nobackup
 tmp
 .cache
-EOF`
+"
 
 EXTERNAL_SSH=cloudsuite@myexamplebackupserver.net
 
