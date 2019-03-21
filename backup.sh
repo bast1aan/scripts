@@ -13,13 +13,18 @@
 #
 # $ mkdir /var/tmp/$USER-export
 # $ pwgen -s 16 1 > ~/.encfs_pwd
+# $ chmod 600 ~/.encfs_pwd
 # $ encfs --reverse $HOME /var/tmp/$USER-export
-# and then use the standard options, and fill in the password 
-# from ~/.encfs_pwd
+#   and then use the standard options, and fill in the password 
+#   from ~/.encfs_pwd
 # 
 # next test it with:
 # $ fusermount -u /var/tmp/$USER-export
 # $ encfs --reverse --extpass="/bin/cat $HOME/.encfs_pwd" $HOME /var/tmp/$USER-export
+# 
+# to make all encfs related info as little readable as possibe:
+# $ chmod 600 ~/.encfs*
+# (this includes the generated ~/.encfs6.xml as well)
 # 
 # Done!
 
