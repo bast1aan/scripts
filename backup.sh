@@ -51,14 +51,14 @@ echo_exclude_opts() {
     done;
 }
 
-encrypted_encludes=`echo_existing_excludes | encfsctl encode --extpass="/bin/cat $HOME/.encfs_pwd" $HOME`
+encrypted_excludes=`echo_existing_excludes | encfsctl encode --extpass="/bin/cat $HOME/.encfs_pwd" $HOME`
 
 mountpoint=/var/tmp/$USER-export
 mkdir $mountpoint
 
 encfs --reverse --extpass="/bin/cat $HOME/.encfs_pwd" $HOME $mountpoint
 
-rsync -rlptvx --bwlimit=1000 --delete `echo_exclude_opts $encrypted_encludes` $mountpoint/ $EXTERNAL_SSH:storage/t450s/home/$USER
+rsync -rlptvx --bwlimit=1000 --delete `echo_exclude_opts $encrypted_excludes` $mountpoint/ $EXTERNAL_SSH:storage/t450s/home/$USER
 
 fusermount -u $mountpoint
 
