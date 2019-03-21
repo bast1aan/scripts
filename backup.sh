@@ -54,7 +54,10 @@ echo_exclude_opts() {
 encrypted_excludes=`echo_existing_excludes | encfsctl encode --extpass="/bin/cat $HOME/.encfs_pwd" $HOME`
 
 mountpoint=/var/tmp/$USER-export
-mkdir $mountpoint
+
+if [ ! -d $mountpoint ]; then
+    mkdir $mountpoint
+fi
 
 encfs --reverse --extpass="/bin/cat $HOME/.encfs_pwd" $HOME $mountpoint
 
