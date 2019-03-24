@@ -53,7 +53,11 @@ echo_exclude_opts() {
 
 encrypted_excludes=`echo_existing_excludes | encfsctl encode --extpass="/bin/cat $HOME/.encfs_pwd" $HOME`
 
-mountpoint=/var/tmp/$USER-export
+if [ -n "$XDG_RUNTIME_DIR" ] && [ -d $XDG_RUNTIME_DIR ]; then
+    mountpoint=$XDG_RUNTIME_DIR/home-export
+else
+    mountpoint=/tmp/$USER-export
+fi
 
 if [ ! -d $mountpoint ]; then
     mkdir $mountpoint
