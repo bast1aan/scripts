@@ -11,16 +11,16 @@
 #
 # To meet these requirements; do:
 #
-# $ mkdir /var/tmp/$USER-export
+# $ mkdir /tmp/$USER-export
 # $ pwgen -s 16 1 > ~/.encfs_pwd
 # $ chmod 600 ~/.encfs_pwd
-# $ encfs --reverse $HOME /var/tmp/$USER-export
+# $ encfs --reverse $HOME /tmp/$USER-export
 #   and then use the standard options, and fill in the password 
 #   from ~/.encfs_pwd
 # 
 # next test it with:
-# $ fusermount -u /var/tmp/$USER-export
-# $ encfs --reverse --extpass="/bin/cat $HOME/.encfs_pwd" $HOME /var/tmp/$USER-export
+# $ fusermount -u /tmp/$USER-export
+# $ encfs --reverse --extpass="/bin/cat $HOME/.encfs_pwd" $HOME /tmp/$USER-export
 # 
 # to make all encfs related info as little readable as possibe:
 # $ chmod 600 ~/.encfs*
@@ -53,7 +53,11 @@ echo_exclude_opts() {
 
 encrypted_excludes=`echo_existing_excludes | encfsctl encode --extpass="/bin/cat $HOME/.encfs_pwd" $HOME`
 
-mountpoint=/var/tmp/$USER-export
+if [ -n "$XDG_RUNTIME_DIR" ] && [ -d $XDG_RUNTIME_DIR ]; then
+    mountpoint=$XDG_RUNTIME_DIR/home-export
+else
+    mountpoint=/tmp/$USER-export
+fi
 
 if [ ! -d $mountpoint ]; then
     mkdir $mountpoint
