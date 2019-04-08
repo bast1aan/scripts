@@ -36,6 +36,10 @@ tmp
 
 EXTERNAL_SSH=cloudsuite@myexamplebackupserver.net
 
+EXTERNAL_STORAGE_DIR=storage/latitude-bastiaan
+
+EXTERNAL_SNAPSHOT_DIR=storage/snapshots/latitude-bastiaan
+
 echo_existing_excludes() {
     #find if dirs actually exist
     for i in $EXCLUDES; do
@@ -65,11 +69,11 @@ fi
 
 encfs --reverse --extpass="/bin/cat $HOME/.encfs_pwd" $HOME $mountpoint
 
-rsync -rlptvx --bwlimit=1000 --delete `echo_exclude_opts $encrypted_excludes` $mountpoint/ $EXTERNAL_SSH:storage/t450s/home/$USER
+rsync -rlptvx --bwlimit=1000 --delete `echo_exclude_opts $encrypted_excludes` $mountpoint/ $EXTERNAL_SSH:$EXTERNAL_STORAGE_DIR/home/$USER
 
 fusermount -u $mountpoint
 
 echo Making hardlink snapshot...
 today=`date +%Y_%m_%d`
-ssh $EXTERNAL_SSH cp -al storage/t450s storage/snapshots/t450s/$today
+ssh $EXTERNAL_SSH cp -al $EXTERNAL_STORAGE_DIR $EXTERNAL_SNAPSHOT_DIR/$today
 echo done.
