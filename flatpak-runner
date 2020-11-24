@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Put file in /usr/local/libexec/flatpak-runner and then
+# symlink for instance /usr/local/bin/spotify to ../libexec/flatpak-runner
+
 pkgs=(
  [spotify]=com.spotify.Client
 )
