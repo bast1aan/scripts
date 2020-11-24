@@ -1,0 +1,11 @@
+#!/bin/bash
+
+pkgs=(
+ [spotify]=com.spotify.Client
+)
+
+cmd=`basename $0`
+args=$@
+
+
+flatpak run --command="$cmd" ${pkgs[$cmd]} $args
