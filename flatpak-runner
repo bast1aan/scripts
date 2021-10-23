@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Put file in /usr/local/libexec/flatpak-runner and then
+# symlink for instance /usr/local/bin/spotify to ../libexec/flatpak-runner
+
+declare -A pkgs
+
+pkgs=(
+ [spotify]=com.spotify.Client
+)
+
+cmd=`basename $0`
+args=$@
+
+
+flatpak run --command="$cmd" ${pkgs[$cmd]} $args
