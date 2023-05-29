@@ -1,2 +1,31 @@
 Helper scripts for fscrypt, to be able to lock/unlock several directories at once.
 
+See the fscrypt project at https://github.com/google/fscrypt
+
+This tool assumes using custom passphrases, for they work without problems across the entire system.
+This isn't the case for login passphrases, that still has some ocassional nasty bugs.
+
+Install:
+
+- place fsc-unlock.sh and fsc-lock.sh in /usr/local/sbin as root
+- optional: for convinience, make symlinks without the .sh extension:
+  ln -s fsc-lock.sh /usr/local/fsc-lock
+  ln -s fsc-unlock.sh /usr/local/fsc-unlock
+- create directory /usr/local/etc/fsc
+- place a user configuration in /usr/local/etc/fsc/$username.sh
+  use user-conf-example.sh from the project as an example
+- make this config file readonly:
+  chown root:root /usr/local/etc/fsc/username.sh ; chmod 600 /usr/local/etc/fsc/username.sh
+
+If this is done, you can use:
+
+fsc-unlock username
+
+to unlock directories, and
+
+fsc-lock username
+
+to lock them.
+
+Beware, for the fsc-lock command, also the user will be terminated, thus killing all processes of mentioned user.
+
