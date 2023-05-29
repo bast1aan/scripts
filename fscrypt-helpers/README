@@ -9,8 +9,8 @@ Install:
 
 - place fsc-unlock.sh and fsc-lock.sh in /usr/local/sbin as root
 - optional: for convinience, make symlinks without the .sh extension:
-  ln -s fsc-lock.sh /usr/local/fsc-lock
-  ln -s fsc-unlock.sh /usr/local/fsc-unlock
+  ln -s fsc-lock.sh /usr/local/sbin/fsc-lock
+  ln -s fsc-unlock.sh /usr/local/sbin/fsc-unlock
 - create directory /usr/local/etc/fsc
 - place a user configuration in /usr/local/etc/fsc/$username.sh
   use user-conf-example.sh from the project as an example
