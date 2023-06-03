@@ -1,0 +1,20 @@
+WEBVTT en
+
+{%  if 'exp' in classes: %}
+STYLE
+::cue(.exp) {
+	color: yellow;
+	font-style: italic;
+}
+{% endif %}
+
+{% for cue in cues %}
+{{ cue.timeline }}{% if 'exp' in cue.cls: %} line:0{% endif %}
+{%if 'exp' in cue.cls -%}
+<c.{{ cue.cls }}><i>{{ cue.content }}</i></c>
+{% elif cue.cls -%}
+<c.{{ cue.cls }}>{{ cue.content }}</c>
+{% else -%}
+{{ cue.content }}
+{% endif %}
+{% endfor %}
