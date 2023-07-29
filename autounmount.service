@@ -1,0 +1,10 @@
+[Unit]
+Description=AutoUnmount trigger
+Requires=[mount definitions]
+After=[mount definitions]
+
+[Service]
+ExecStart=/usr/local/lib/autounmount/autounmount.sh
+
+[Install]
+WantedBy=[mount definitions]
