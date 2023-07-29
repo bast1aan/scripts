@@ -10,12 +10,14 @@ watch_unmount() {
 	echo $BASHPID > $runfile
 	trap "rm $runfile" EXIT
 	
+	what=`grep $mountpoint /etc/mtab | grep -v autofs`
+	
 	sleep $timeout
-	while ! umount $mountpoint; do
-		echo Cannot unmount $mountpoint, sleeping.
+	while ! umount $what; do
+		echo Cannot unmount $what on $mountpoint, sleeping.
 		sleep $timeout
 	done
-	echo Unmounted $mountpoint, exiting.
+	echo Unmounted $what on $mountpoint, exiting.
 }
 
 slashes_to_dashes() {
