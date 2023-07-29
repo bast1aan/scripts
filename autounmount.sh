@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rundir=/run/unmount-autofses
+rundir=/run/autounmount
 
 watch_unmount() {
 	mountpoint=$1
