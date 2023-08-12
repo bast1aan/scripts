@@ -1,10 +1,9 @@
 [Unit]
-Description=AutoUnmount trigger
-Requires=[mount definitions]
-After=[mount definitions]
+Description=AutoUnmount watcher
+Requires=mnt-dir1.mount mnt-dir2.mount
+After=mnt-dir1.mount mnt-dir2.mount
 
 [Service]
-ExecStart=/usr/local/lib/autounmount/autounmount.sh
+ExecStart=/usr/local/lib/autounmount/watch_mounts.py /mnt/dir1 /mnt/dir2 /usr/local/lib/autounmount/autounmount.sh
+RemainAfterExit=yes
 
-[Install]
-WantedBy=[mount definitions]
