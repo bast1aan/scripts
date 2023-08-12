@@ -1,7 +1,7 @@
 [Unit]
 Description=AutoUnmount watcher
-Requires=mnt-dir1.mount mnt-dir2.mount
-After=mnt-dir1.mount mnt-dir2.mount
+Requires=mnt-dir1.automount mnt-dir2.automount
+After=mnt-dir1.automount mnt-dir2.automount
 
 [Service]
 ExecStart=/usr/local/lib/autounmount/watch_mounts.py /mnt/dir1 /mnt/dir2 /usr/local/lib/autounmount/autounmount.sh
