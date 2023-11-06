@@ -1,0 +1,11 @@
+[Unit]
+Description=fscrypt unlock system
+Requires=local-fs.target
+Before=multi-user.target getty@tty1.service systemd-logind.service display-manager.service plymouth-quit.service plymouth-quit-wait.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'FSC_PASSWORD=$(systemd-ask-password "Password for system") /usr/local/sbin/fsc-unlock.sh system'
+
+[Install]
+WantedBy=sysinit.target
