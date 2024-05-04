@@ -5,7 +5,7 @@ install_tpmfido() {
 	groupadd -r _tpmfido || true
 	groupadd -r tpmfido || true
 
-	usermod -a -G tpmfido $SUDO_USER || true
+	usermod -a -G tpmfido $SUDO_USER
 
 	install -d /usr/local/libexec
 	install -g tpmfido -m 750 -d /usr/local/libexec/tpm-fido
