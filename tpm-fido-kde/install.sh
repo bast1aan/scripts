@@ -1,4 +1,54 @@
 #!/bin/bash -e
+# 
+# You are advised to read this script to make sure it does not do any harm to
+# your system!  There is not any warranty. If you think something does harm,
+# please create a ticket on github.com/bast1aan/scripts.
+# 
+# This script installs on your system:
+# 
+# * tpmfido-gui, a small gui wrapper around tpm-fido, keeping a window on your
+#   desktop as long as tpm-fido is running, and killing tpm-fido when closing
+#   that window. 
+# * tpm-fido, the great tool from Peter Sanford hosted at
+#   https://github.com/psanford/tpm-fido that enables you to use your PCs TPM
+#   chip to perform secure hardware-backed FIDO2 logins or 2nd factor
+#   authentications on websites, local systems and more, without the need for
+#   an external key.
+# * A set of udev rules to make everything work
+# 
+# In addition, I'm quite strongly opinionated on the poor default Linux distro
+# security concerning the TPM chip, that IMHO defeats the purpose of performing
+# hardware-backed authentication.  So I extended the installation as follows in
+# the hope to be more secure:
+# 
+# * Encourages the user NOT to have broad access rights on the /dev/tpmrm*
+#   device through membership of the `tss' group;
+# * Encourages the user NOT to enable broad access to the /dev/uhid device to
+#    make tpm-fido working;
+# * .. but rather create a one-purpose `_tpmfido' group that grants access to
+#   /dev/uhid and /dev/tpmrm* by adding ACLs to the device nodes;
+# * make the tpm-fido binary SUID on this group;
+# * and create another `tpmfido' group for user membership. The tpm-fido
+#   binary resides in a subdirectory /usr/local/libexec/tpm-fido/ that is
+#   only accessible for members of the `tpmfido' group.
+# 
+# In this way the access to the tpm-fido functionality can be fine grained to
+# specific users, and *only* the code inside the tpm-fido binary has access to
+# the TPM for performing key signing operations, and the uhid device for
+# registering the virtual USB key.
+# 
+# This install.sh script is tested on Kubuntu 24.04. I expect it should run on
+# other distros and desktop environments as well, but the tpmfido-gui seems to
+# only work with pinentry-qt because the pinentry-gnome and pinentry-x11
+# versions block all access to your system while running.
+# 
+# Another items of interest in this folder:
+# * uninstall.sh - should undo all of the custom files installed by install.sh
+# * tests/ - a folder containing a test environment with Docker where the
+#   install.sh and uninstall.sh tools can be tested.
+# 
+# (C) 2024 Bastiaan Welmers
+# 
 
 install_tpmfido() {
 	set -x
