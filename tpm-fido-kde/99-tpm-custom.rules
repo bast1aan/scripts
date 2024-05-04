@@ -1,0 +1,1 @@
+KERNEL=="tpmrm[0-9]*", RUN+="/bin/setfacl -m g:_tpmfido:rw $env{DEVNAME}"

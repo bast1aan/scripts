@@ -1,0 +1,1 @@
+KERNEL=="uhid", SUBSYSTEM=="misc", RUN+="/bin/setfacl -m g:_tpmfido:rw $env{DEVNAME}"
