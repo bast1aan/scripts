@@ -19,6 +19,8 @@ install_tpmfido() {
 	install -m 644 -b uhid.conf /etc/modules-load.d
 	install -m 644 -b 99-tpm-custom.rules 99-uhid.rules /etc/udev/rules.d
 	
+	install -m 644 -b 69-snap-tpm-fido.rules /etc/udev/rules.d
+	
 	/bin/setfacl -m g:_tpmfido:rw /dev/uhid
 	/bin/setfacl -m g:_tpmfido:rw /dev/tpmrm0
 	set +x

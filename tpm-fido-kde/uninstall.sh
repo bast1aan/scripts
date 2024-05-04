@@ -3,6 +3,7 @@
 uninstall_tpmfido() {
 	set -x
 	
+	rm /etc/udev/rules.d/69-snap-tpm-fido.rules
 	rm /etc/udev/rules.d/99-tpm-custom.rules /etc/udev/rules.d/99-uhid.rules
 	rm /etc/modules-load.d/uhid.conf 
 	rm /usr/local/bin/tpm-fido
