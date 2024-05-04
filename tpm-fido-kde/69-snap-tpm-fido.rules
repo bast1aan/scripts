@@ -1,0 +1,1 @@
+SUBSYSTEM=="hidraw", DEVPATH=="/devices/virtual/misc/uhid/0003:15D9:0A37.*", TAG+="snap_firefox_firefox", TAG+="snap_chromium_chromium"
