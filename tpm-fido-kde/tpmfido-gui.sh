@@ -1,6 +1,6 @@
 #!/bin/sh
 
-tpm-fido >> $HOME/tmp/tpm-fido.log 2>&1 &
+tpm-fido >> $XDG_RUNTIME_DIR/tpm-fido.log 2>&1 &
 pid=$!
 	
 echo 'SETTITLE tpm-fido
