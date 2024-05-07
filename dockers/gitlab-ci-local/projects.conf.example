@@ -1,0 +1,9 @@
+# define projects you want to use in gitlab-ci-local
+#
+# this is shell code included by run.sh
+# 
+# copy to projects.conf to use it
+projects="
+$HOME/Projects/myproject
+/some/other/place
+"
