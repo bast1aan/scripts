@@ -1,0 +1,14 @@
+[Unit]
+Description=fscrypt unlock system
+# Required mounts depend on encryption dirs defined in /usr/local/etc/fsc/system.sh
+RequiresMountsFor=/usr/local /var
+DefaultDependencies=no
+After=systemd-remount-fs.service
+Before=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'FSC_PASSWORD=$(systemd-ask-password "Password for system directories") /usr/local/sbin/fsc-unlock.sh system'
+
+[Install]
+WantedBy=local-fs.target
