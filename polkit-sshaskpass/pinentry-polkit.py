@@ -58,12 +58,12 @@ if __name__ == "__main__":
     with popen as proc:
         greeting = proc.stdout.readline()
         sys.stdout.write(greeting)
-        while line := sys.stdin.readline():
+        while line := sys.stdin.readline().rstrip():
             if line.startswith('SETDESC'):
                 # we record the description
-                message = line[8:-1]
+                message = line[8:]
 
-            if line.strip() == 'CONFIRM':
+            if line == 'CONFIRM':
                 authorized = authorize(message)
                 if authorized:
                     sys.stdout.write("OK\n")
@@ -76,7 +76,7 @@ if __name__ == "__main__":
                 # if line is not CONFIRM, then just pass every line to the
                 # underlying pinentry
                 debug("WRITING TO PROC: ", repr(line), '\n')
-                proc.stdin.write(line)
+                proc.stdin.write(line + '\n')
                 proc_line = proc.stdout.readline()
                 if not proc_line:
                     # EOF reached
