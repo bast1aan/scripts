@@ -7,7 +7,17 @@ from typing import NamedTuple
 import dbus
 
 PINENTRY = os.environ.get("PINENTRY", default="pinentry")  # program to execute beyond this one
+DEBUG = False
 
+
+_log = None
+
+def debug(*msgs: str) -> None:
+    global _log
+    if not DEBUG: return
+    if not _log: _log = open('/tmp/polkit-pinentry.log', 'a')
+    _log.write(''.join(msgs))
+    _log.flush()
 
 def authorize(message: str) -> bool:
 
@@ -63,9 +73,11 @@ if __name__ == "__main__":
             else:
                 # if line is not CONFIRM, then just pass every line to the
                 # underlying pinentry
+                debug("WRITING TO PROC: ", repr(line), '\n')
                 proc.stdin.write(line)
                 proc_line = proc.stdout.readline()
                 if not proc_line:
                     # EOF reached
                     break
+                debug("WRITING TO STDOUT: ", repr(proc_line), '\n')
                 sys.stdout.write(proc_line)
