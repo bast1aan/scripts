@@ -56,6 +56,8 @@ if __name__ == "__main__":
     )
     # mini Assuan proxy
     with popen as proc:
+        greeting = proc.stdout.readline()
+        sys.stdout.write(greeting)
         while line := sys.stdin.readline():
             if line.startswith('SETDESC'):
                 # we record the description
