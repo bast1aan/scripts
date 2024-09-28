@@ -63,7 +63,7 @@ if __name__ == "__main__":
                 # we record the description
                 message = line[8:-1]
 
-            if line == 'CONFIRM\n':
+            if line.strip() == 'CONFIRM':
                 authorized = authorize(message)
                 if authorized:
                     sys.stdout.write("OK\n")
