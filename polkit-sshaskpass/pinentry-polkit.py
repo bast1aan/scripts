@@ -2,9 +2,8 @@
 import os
 import subprocess
 import sys
-from typing import NamedTuple
 
-import dbus
+import bast1aan_polkit
 
 PINENTRY = os.environ.get("PINENTRY", default="pinentry")  # program to execute beyond this one
 DEBUG = False
@@ -18,30 +17,6 @@ def debug(*msgs: str) -> None:
     if not _log: _log = open('/tmp/polkit-pinentry.log', 'a')
     _log.write(''.join(msgs))
     _log.flush()
-
-def authorize(message: str) -> bool:
-
-    class PolkitAuthorizationResult(NamedTuple):
-        is_authorized: dbus.Boolean
-        is_challenge: dbus.Boolean
-        details: dbus.Dictionary
-
-    bus = dbus.SystemBus()
-
-    proxy = bus.get_object('org.freedesktop.PolicyKit1', '/org/freedesktop/PolicyKit1/Authority')
-    authority = dbus.Interface(proxy, dbus_interface='org.freedesktop.PolicyKit1.Authority')
-    system_bus_name = bus.get_unique_name()
-
-    subject = ('system-bus-name', {'name': system_bus_name})
-    action_id = 'net.welmers.bast1aan.polkit-sshaskpass'
-    details = {'message': message}
-    flags = 1  # AllowUserInteraction flag
-    cancellation_id = ''  # No cancellation id
-
-    result = PolkitAuthorizationResult(
-        *authority.CheckAuthorization(subject, action_id, details, flags, cancellation_id)
-    )
-    return bool(result.is_authorized)
 
 if __name__ == "__main__":
     message = ''
@@ -64,7 +39,7 @@ if __name__ == "__main__":
                 message = line[8:]
 
             if line == 'CONFIRM':
-                authorized = authorize(message)
+                authorized = bast1aan_polkit.authorize(message)
                 if authorized:
                     sys.stdout.write("OK\n")
                 else:
