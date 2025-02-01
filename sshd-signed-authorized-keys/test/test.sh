@@ -102,6 +102,20 @@ ssh -o "PasswordAuthentication no" -q user@localhost exit
 su user -c 'test "$(md5sum < /home/user/.ssh/authorized_keys)" = "$(md5sum < /var/local/sshd_signed_authorized_keys/user)"'
 
 #################################################
+# test authorized_keys used by sshd will not change if we tamper with the file
+
+cat /root/.ssh/id_ed25519-2.pub >> /home/user/.ssh/authorized_keys
+
+# we can still login with default identity
+ssh -o "PasswordAuthentication no" -q user@localhost exit
+
+# we can't login with the newly added identify 
+! ssh -i /root/.ssh/id_ed25519-2 -o "PasswordAuthentication no" -q user@localhost exit
+
+# signed file should not have been touched
+test "$(md5sum < /root/user/.ssh/authorized_keys)" = "$(md5sum < /var/local/sshd_signed_authorized_keys/user)"
+
+#################################################
 
 echo
 echo '##################################'
