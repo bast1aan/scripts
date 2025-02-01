@@ -110,7 +110,10 @@ cat /root/.ssh/id_ed25519-2.pub >> /home/user/.ssh/authorized_keys
 ssh -o "PasswordAuthentication no" -q user@localhost exit
 
 # we can't login with the newly added identify 
-! ssh -i /root/.ssh/id_ed25519-2 -o "PasswordAuthentication no" -q user@localhost exit
+if ssh -i /root/.ssh/id_ed25519-2 -o "PasswordAuthentication no" -q user@localhost exit ; then
+	echo We should not be able to login with id_ed25519-2
+	exit 1
+fi
 
 # signed file should not have been touched
 test "$(md5sum < /root/user/.ssh/authorized_keys)" = "$(md5sum < /var/local/sshd_signed_authorized_keys/user)"
