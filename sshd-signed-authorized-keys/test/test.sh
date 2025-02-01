@@ -90,6 +90,18 @@ ssh -o "PasswordAuthentication no" -q user@localhost exit
 test -z "$(ls /var/local/sshd_signed_authorized_keys/)"
 
 #################################################
+# test with signature
+
+cp /root/user/.ssh/authorized_keys.sig /home/user/.ssh/
+chown user:user /home/user/.ssh/authorized_keys.sig
+
+
+ssh -o "PasswordAuthentication no" -q user@localhost exit
+
+# signed file should be picked up, should be readable by user with ACL
+su user -c 'test "$(md5sum < /home/user/.ssh/authorized_keys)" = "$(md5sum < /var/local/sshd_signed_authorized_keys/user)"'
+
+#################################################
 
 echo
 echo '##################################'
