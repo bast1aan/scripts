@@ -1,0 +1,54 @@
+Script to assure .ssh/authorized_keys is signed by a trusted entity, to prevent tampering with this file.
+
+### REASONS ###
+
+This can be useful if you deal with ssh accounts that grants access to clients that cannot be trusted enough,
+like old ssh clients running on ill managed windows or android devices.
+
+The script is backwards compatible with accounts that has no signed ~/.ssh/authorized_keys file.
+
+The script will replace the default openssh behaviour of reading ~/.ssh/authorized_keys. Instead,
+it will run /usr/local/libexec/sshd_authorized_keys as root. (see authorized_keys.conf)
+
+Working of the script, in sequential execution order:
+
+- The script will check for the existence of ~/.ssh/authorized_keys.sig. If it exists, it will try
+  to perform a gpg signature validation with keyrings installed in /usr/local/etc/sshd_authorized_keys_keyring/
+  If the validation succeeds, it will copy the signed authorized_keys to a safe place in 
+  /var/local/sshd_signed_authorized_keys/$username
+  The file in /var/local/sshd_signed_authorized_keys/$username is made available readonly for the
+  user with ACLs so the user is able to debug login issues.
+
+- The script will test the existence of /var/local/sshd_signed_authorized_keys/$username , if is exists
+  it will return the content to sshd and exit.
+
+- If the cached signed authorized_keys file does not exist, the script will fallback to default behaviour of
+  returning the content ~/.ssh/authorized_keys (and ~/.ssh/authorized_keys2 if it exists, for compatability
+  reasons) to sshd. 
+
+This should guarantee following:
+ - if a valid signed ~/.ssh/authorized_keys exists, it will be used
+ - if the ~/.ssh/authorized_keys file was valid before but no longer is, the old version will be used, so
+   the user won't be locked out, and unauthorized changes to ~/.ssh/authorized_keys are ignored.
+ - if a user has never configured a signed ~/.ssh/authorized_keys file, it will fallback to default behaviour.
+
+### INSTALL ###
+
+One should simply run `make' as root to install, see the Makefile what then happens.
+The programs `gpgv' and `setfacl' are required.
+
+Install your keyrings in /usr/local/etc/sshd_signed_authorized_keys/ . Make sure this directory and the files
+in it can only be changed by the administrator.
+
+See some recipes in the test/ folder how this can be done.
+
+Don't forget to restart the ssh server after installing, and test if at least logins still work.
+
+### TESTS ###
+
+A test suite running on debian bookworm in docker can be found in the test/ subdirectory. Simply run `make'
+in this folder to run the testsuite. Docker is required to run it.
+
+It tests both the install script, as the correct behaviour in sshd.
+
+
