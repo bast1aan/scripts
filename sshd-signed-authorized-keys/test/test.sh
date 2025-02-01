@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e -x
+
 testdir=$(mktemp -d)
 
 cd /root/subject
@@ -60,6 +62,11 @@ if ! make ; then
 fi
 
 ###################################################
+
+test -f /usr/local/libexec/sshd_authorized_keys
+test -x /usr/local/libexec/sshd_authorized_keys
+test -f /etc/ssh/sshd_config.d/authorized_keys.conf
+test -d /var/local/sshd_signed_authorized_keys
 
 
 echo
