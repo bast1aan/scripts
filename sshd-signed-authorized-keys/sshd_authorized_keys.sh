@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 user=$1
 home=$2
