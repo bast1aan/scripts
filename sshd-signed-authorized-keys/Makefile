@@ -3,6 +3,7 @@
 install: test-requirements
 	install -d -m 0755 -o root /var/local/sshd_signed_authorized_keys
 	install -d -m 0755 -o root /usr/local/libexec
+	install -d -m 0755 -o root /usr/local/etc/sshd_authorized_keys_keyring
 	install -m 755 sshd_authorized_keys.sh /usr/local/libexec/sshd_authorized_keys
 	install -m 644 authorized_keys.conf /etc/ssh/sshd_config.d/
 
