@@ -4,6 +4,8 @@ testdir=$(mktemp -d)
 
 cd /root/subject
 
+#####################################################
+
 mv /usr/bin/gpgv /usr/bin/gpgv.disabled
 
 if make 2>&1 > $testdir/gpgv.out ; then
@@ -18,6 +20,10 @@ fi
 
 mv /usr/bin/gpgv.disabled /usr/bin/gpgv
 
+#####################################################
+
+mv /bin/setfacl /bin/setfacl.disabled
+
 if make 2>&1 > $testdir/acl.out ; then
 	echo Make should fail when acl not installed >&2
 	exit 1
@@ -28,7 +34,11 @@ else
 	fi
 fi
 
-apt install -y acl
+mv /bin/setfacl.disabled /bin/setfacl
+
+####################################################
+
+mv /etc/ssh/sshd_config.d /etc/ssh/sshd_config.d.disabled
 
 if make 2>&1 > $testdir/ssh.out ; then
 	echo Make should fail when /etc/ssh/sshd_config.d not exist >&2
@@ -40,13 +50,19 @@ else
 	fi
 fi
 
-apt install -y openssh-server
+mv /etc/ssh/sshd_config.d.disabled /etc/ssh/sshd_config.d
+
+####################################################
 
 if ! make ; then
 	echo Make should run >&2
 	exit 1
 fi
 
+###################################################
 
-echo Testsuite ran succesfully 
+
+echo
+echo '##################################'
+echo Testsuite ran succesfully !
 exit 0
