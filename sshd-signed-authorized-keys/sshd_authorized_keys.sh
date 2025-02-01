@@ -11,7 +11,7 @@ as_user() {
 	setpriv --reuid $uid "$@"
 }
 
-if as_user [ -f "$user_authorized_keys.sig" ]; then
+if as_user [ -f "$user_authorized_keys.sig" ] && as_user [ $(stat --format %Y "$user_authorized_keys.sig") -gt $(stat --format %Y $signed_authorized_keys || echo 0) ]; then
 	keyrings=''
 	for f in /usr/local/etc/sshd_authorized_keys_keyring/*; do
 		keyrings="$keyrings --keyring=$f "

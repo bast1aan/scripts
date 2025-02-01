@@ -134,6 +134,24 @@ ssh -i /root/.ssh/id_ed25519-2 -o "PasswordAuthentication no" -q user@localhost 
 su user -c 'test "$(md5sum < /home/user/.ssh/authorized_keys)" = "$(md5sum < /var/local/sshd_signed_authorized_keys/user)"'
 
 #################################################
+# test signed authorized_keys is not updated if sig file has not changed
+# TODO
+
+sleep 2
+
+mtime_sigfile=$(stat --format %Y /var/local/sshd_signed_authorized_keys/user)
+
+# we can still login with default identity
+ssh -o "PasswordAuthentication no" -q user@localhost exit
+
+# we now *also* can login with the newly added identify 
+ssh -i /root/.ssh/id_ed25519-2 -o "PasswordAuthentication no" -q user@localhost exit
+
+# file should not have updated
+test "$mtime_sigfile" = "$(stat --format %Y /var/local/sshd_signed_authorized_keys/user)"
+
+#################################################
+
 
 echo
 echo '##################################'
