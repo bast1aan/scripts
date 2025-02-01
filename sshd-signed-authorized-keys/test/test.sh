@@ -135,7 +135,6 @@ su user -c 'test "$(md5sum < /home/user/.ssh/authorized_keys)" = "$(md5sum < /va
 
 #################################################
 # test signed authorized_keys is not updated if sig file has not changed
-# TODO
 
 sleep 2
 
@@ -151,6 +150,26 @@ ssh -i /root/.ssh/id_ed25519-2 -o "PasswordAuthentication no" -q user@localhost 
 test "$mtime_sigfile" = "$(stat --format %Y /var/local/sshd_signed_authorized_keys/user)"
 
 #################################################
+# test signed authorized_keys is newer if sig file has not changed
+
+cp /root/user/.ssh/authorized_keys /home/user/.ssh/
+cp /root/user/.ssh/authorized_keys.sig /home/user/.ssh/
+chown user:user /home/user/.ssh/authorized_keys.*
+
+# we can still login with default identity
+ssh -o "PasswordAuthentication no" -q user@localhost exit
+
+# we now can no longer login with the second identify 
+if ssh -i /root/.ssh/id_ed25519-2 -o "PasswordAuthentication no" -q user@localhost exit ; then
+	echo We should not be able to login with id_ed25519-2
+	exit 1
+fi
+
+# file should have updated
+test "$(stat --format %Y /var/local/sshd_signed_authorized_keys/user)" -gt "$mtime_sigfile" 
+
+#################################################
+
 
 
 echo
