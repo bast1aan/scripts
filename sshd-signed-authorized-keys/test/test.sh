@@ -69,6 +69,27 @@ test -f /etc/ssh/sshd_config.d/authorized_keys.conf
 test -d /var/local/sshd_signed_authorized_keys
 test -d /usr/local/etc/sshd_authorized_keys_keyring
 
+###################################################
+# arrange sshd
+
+mkdir /home/user/.ssh
+cp /root/user/.ssh/authorized_keys /home/user/.ssh/
+chown -R user:user /home/user/.ssh
+chmod 700 /home/user/.ssh
+cp /root/test@example.com.gpg /usr/local/etc/sshd_authorized_keys_keyring/
+/etc/init.d/ssh restart
+ssh-keyscan localhost >> ~/.ssh/known_hosts
+
+##################################################
+# test without signature
+
+# try if we can authenticate succesfully
+ssh -o "PasswordAuthentication no" -q user@localhost exit
+
+# should not contain any file
+test -z "$(ls /var/local/sshd_signed_authorized_keys/)"
+
+#################################################
 
 echo
 echo '##################################'
