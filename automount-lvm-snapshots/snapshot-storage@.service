@@ -1,0 +1,8 @@
+[Unit]
+Description=snapshotter for %i
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/lvcreate -s -K -n %i_snapshot vg_storage/%i
+ExecStop=/usr/sbin/lvremove -y vg_storage/%i_snapshot

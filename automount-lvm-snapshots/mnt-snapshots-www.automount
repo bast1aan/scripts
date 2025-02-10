@@ -1,0 +1,6 @@
+[Unit]
+Description=www snapshots automount
+
+[Automount]
+Where=/mnt/snapshots/www
+TimeoutIdleSec=60s

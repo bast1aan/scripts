@@ -1,0 +1,12 @@
+[Unit]
+Description=mount snapshot www
+BindsTo=snapshot-storage@www.service
+After=snapshot-storage@www.service
+PropagatesStopTo=snapshot-storage@www.service
+
+[Mount]
+What=/dev/vg_storage/www_snapshot
+Where=/mnt/snapshots/www
+Type=xfs
+Options=nouuid
+TimeoutSec=10
